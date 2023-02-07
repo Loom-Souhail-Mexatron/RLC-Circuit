@@ -1,4 +1,3 @@
-from tabulate import tabulate
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import EngFormatter
@@ -33,8 +32,27 @@ data = [["Q_0","Charge: ",Q_0,"C"],["C","Capacitance: ",C,"F"],
         ["X_C","Capacitive Reactance: ", Cw,"Ohm"],
         ["X_L","Inductive Reactance", Lw,"Ohm"],
         ["Phi","Phase shift",np.arctan((Lw-Cw)/R),"rad"],
-        ["Q","Quality Factor",np.sqrt(L/C)/R],
-        ["Transient Response: ",currType]]
+        ["Q","Quality Factor",np.sqrt(L/C)/R,""],
+        ["","Transient Response: ",currType,""]]
+
+def tabulate(data, headers):
+    # Find the maximum length of the headers and data elements
+    max_lengths = [len(str(header)) for header in headers]
+    for row in data:
+        for i, element in enumerate(row):
+            max_lengths[i] = max(max_lengths[i], len(str(element)))
+    
+    # Construct the format string
+    format_str = ' | '.join(['{:<' + str(length) + '}' for length in max_lengths])
+    
+    # Print the headers
+    print(format_str.format(*headers))
+    print('-' * (sum(max_lengths) + 3 * len(headers) - 1))
+    
+    # Print the data
+    for row in data:
+        print(format_str.format(*row))
+
 
 print(tabulate(data,headers=["","Name","Value","Unit"]))
 
